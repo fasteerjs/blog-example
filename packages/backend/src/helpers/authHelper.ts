@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, User, UserRole } from "@prisma/client";
 import * as jwt from "jsonwebtoken";
 import { Error, error, Succces, success } from "./responseHelper";
 
@@ -16,21 +16,22 @@ export interface WithUserResult<TUser extends User = User> {
 export const WithUserErrors = {
   MISSING_TOKEN: {
     kind: "user_input",
-    message: "Missing or invalid authorization token",
+    message: "Missing or invalid authorization token"
   },
   ACCOUNT_INACTIVE: {
     kind: "forbidden",
-    message: "Account that belongs to this token is inactive",
+    message: "Account that belongs to this token is inactive"
   },
   ACCOUNT_UNAUTHORIZED: {
     kind: "unauthorized",
-    message: "You are not authorized to perform this action",
-  },
+    message: "You are not authorized to perform this action"
+  }
 };
 
 export const useUser = async (
   req: FastifyRequest,
-  db: PrismaClient
+  db: PrismaClient,
+  verifyRole?: UserRole
 ): Promise<
   | Succces<WithUserResult>
   | Error<typeof WithUserErrors[keyof typeof WithUserErrors]>
@@ -46,16 +47,21 @@ export const useUser = async (
 
   if (!payload) return error(WithUserErrors.MISSING_TOKEN);
 
-  const user = await db.user.findUnique({ where: { id: payload.userId } });
+  const user = await db.user.findUnique({
+    where: { id: payload.userId }
+  });
   if (!user) return error(WithUserErrors.ACCOUNT_INACTIVE);
+
+  if (verifyRole && user.role !== verifyRole)
+    return error(WithUserErrors.ACCOUNT_UNAUTHORIZED);
 
   return success({
     payload,
     user,
     dtoUser: {
       id: user.id,
-      username: user.username,
-    },
+      username: user.username
+    }
   });
 };
 
@@ -63,9 +69,10 @@ export const withUser = async (
   req: FastifyRequest,
   res: FastifyReply,
   db: PrismaClient,
-  fn: (result: WithUserResult) => Promise<any>
+  fn: (result: WithUserResult) => Promise<any>,
+  verifyRole?: UserRole
 ) => {
-  const userCtx = await useUser(req, db);
+  const userCtx = await useUser(req, db, verifyRole);
   if (!userCtx.success || !userCtx.data) return res.send(userCtx);
 
   return await fn(userCtx.data);

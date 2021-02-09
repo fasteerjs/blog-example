@@ -112,17 +112,23 @@ const PostController: BlogCtrl = async (fastify, { db }) => {
     "/create",
     { schema: postCreateSchema },
     async (req, res) =>
-      withUser(req, res, db, async ({ user }) => {
-        const post = await db.post.create({
-          data: {
-            ...req.body.data,
-            authorId: user.id,
-            slug: slugify(req.body.data.title, { lower: true })
-          }
-        });
+      withUser(
+        req,
+        res,
+        db,
+        async ({ user }) => {
+          const post = await db.post.create({
+            data: {
+              ...req.body.data,
+              authorId: user.id,
+              slug: slugify(req.body.data.title, { lower: true })
+            }
+          });
 
-        res.send(success({ post }));
-      })
+          res.send(success({ post }));
+        },
+        "ADMIN"
+      )
   );
 };
 
