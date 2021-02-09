@@ -11,15 +11,15 @@ const AuthController: BlogCtrl = async (fastify, { db }) => {
     async ({ body: { data } }, res) => {
       const user = await db.user.findFirst({
         where: {
-          username: data.username,
-        },
+          username: data.username
+        }
       });
 
       if (!user)
         return res.send(
           error({
             kind: "user_input",
-            message: "User not found.",
+            message: "User not found."
           })
         );
 
@@ -27,7 +27,7 @@ const AuthController: BlogCtrl = async (fastify, { db }) => {
         return res.send(
           error({
             kind: "user_input",
-            message: "Password is incorrect.",
+            message: "Password is incorrect."
           })
         );
 
@@ -43,21 +43,21 @@ const AuthController: BlogCtrl = async (fastify, { db }) => {
     async ({ body: { data } }, res) => {
       if (
         await db.user.findFirst({
-          where: { username: data.username },
+          where: { username: data.username }
         })
       )
         return res.send(
           error({
             kind: "user_input",
-            message: "Username is already taken.",
+            message: "Username is already taken."
           })
         );
 
       await db.user.create({
         data: {
           username: data.username,
-          password: hashSync(data.password),
-        },
+          password: hashSync(data.password)
+        }
       });
 
       res.send(success());

@@ -2,6 +2,7 @@ import { hookFastify, Fasteer } from "@fasteerjs/fasteer";
 import { FastifyInstance } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
+import { port, isDev, deploymentUrl } from "./env";
 
 // Create a new Prisma Instance
 const db = new PrismaClient();
@@ -19,7 +20,15 @@ const fasteer = hookFastify({
   controllers: ["ts", "js"].map(ext =>
     path.join(__dirname, "controllers", `*Controller.${ext}`)
   ),
-  port: 4000,
+  port: port(),
+  host: "127.0.0.1",
+  cors: {
+    origin: isDev() ? "*" : deploymentUrl()
+  },
+  helmet: true,
+  logRequests: isDev(),
+  logErrors: true,
+  development: isDev()
 });
 
 // Inject Prisma into Fasteer
