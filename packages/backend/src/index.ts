@@ -36,7 +36,7 @@ fasteer.inject<BlogInjected>({ db });
 
 const start = async () => {
   const addr = await fasteer.start();
-  fasteer.logger.info("Fasteer started!", addr);
+  fasteer.logger.info(`Fasteer started! ${addr}`);
 };
 
 // Let's go!
