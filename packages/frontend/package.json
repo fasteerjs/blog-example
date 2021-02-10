@@ -4,11 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/postcss7-compat": "^2.0.3",
+    "@tailwindcss/ui": "^0.7.2",
     "@vottuscode/ts-topbar": "^1.0.0",
     "@vottuscode/vue-fetchable": "^1.0.4",
     "autoprefixer": "^9",

@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-evenly bg-gray-700 rounded-md items-center">
-    <div>
+  <div class="flex md:justify-evenly bg-gray-700 rounded-md items-center m-4">
+    <div class="hidden md:block">
       <!-- Source: undraw.co Server down -->
       <svg
         id="aa03ddf9-f8f2-4819-a4ce-be9b0a220741"
@@ -235,7 +235,7 @@
         />
       </svg>
     </div>
-    <div>
+    <div class="p-6">
       <h2 class="text-3xl font-medium">An error has occurred.</h2>
       <h3 class="text-xl">Please try again later.</h3>
     </div>

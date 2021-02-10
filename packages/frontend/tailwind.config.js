@@ -1,7 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  purge: [],
+  purge: ["./public/index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   presets: [],
   darkMode: "class", // or 'media' or 'class'
   theme: {
@@ -912,5 +912,5 @@ module.exports = {
     wordBreak: ["responsive"],
     zIndex: ["responsive", "focus-within", "focus"]
   },
-  plugins: []
+  plugins: [require("@tailwindcss/forms")]
 };
