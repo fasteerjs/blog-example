@@ -3,16 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "author": {
-    "name": "Froneb s.r.o.",
-    "email": "hello@froneb.com",
-    "url": "https://froneb.com"
-  },
-  "contributors": [
-    {
-      "name": "Filip Vottus"
-    }
-  ],
+  "author": "Mia (Filip Vottus) <vottus@vott.us>",
   "workspaces": [
     "packages/*"
   ]
